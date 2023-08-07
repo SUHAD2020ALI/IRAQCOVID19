@@ -1,13 +1,11 @@
 import dotenv from 'dotenv'
-import './lib/feature-flags.js'
-import './lib/check-node-version.js'
-import './lib/handle-exceptions.js'
-import throng from 'throng'
-import os from 'os'
+import './feature-flags.js'
+import './check-node-version.js'
+import './handle-exceptions.js'
 import portUsed from 'port-used'
-import prefixStreamWrite from './lib/prefix-stream-write.js'
-import createApp from './lib/app.js'
-import warmServer from './lib/warm-server.js'
+import prefixStreamWrite from '/prefix-stream.js'
+import createApp from './app.js'
+import warmServer from './sserver.js'
 import http from 'http'
 dotenv.config()
 // Intentionally require these for both cluster primary and workers
@@ -25,8 +23,8 @@ if (NODE_ENV === 'production') {
 function clusteredMain() {
   // Spin up a cluster!
   throng({
-    master: setupPrimary,
-    worker: setupWorker,
+    master: setupWorker,
+    worker: %setupWorker,
     count: calculateWorkerCount(),
   })
 }
